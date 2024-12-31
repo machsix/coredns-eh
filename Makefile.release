@@ -1,0 +1,66 @@
+ifeq (, $(shell which curl))
+    $(error "No curl in $$PATH, please install")
+endif
+
+NAME:=coredns
+BINARY:="coredns" "wgsd-client"
+BINARY_EXE := $(foreach arg,$(ARGS),$(arg).exe)
+VERSION:=$(shell grep 'CoreVersion' pkg/coredns/coremain/version.go | awk '{ print $$3 }' | tr -d '"')
+# VERSION:=$(shell grep -m 1 'coredns/coredns' go.sum  | awk '{print $$2}' | cut -c2-)
+GITHUB:=coredns
+LINUX_ARCH:=amd64 arm arm64 mips64le ppc64le s390x mips riscv64
+GOLANG_VERSION ?= $(shell cat .go-version)
+
+export GOSUMDB = sum.golang.org
+export GOTOOLCHAIN = go$(GOLANG_VERSION)
+
+all:
+	@echo Use the 'release' target to build a release
+
+release: build tar
+
+.PHONY: build
+build: build_other build_linux
+
+.PHONY: build_other
+build_other:
+	@go version
+	@echo Cleaning old builds
+	@rm -rf build/{darwin,windows} && mkdir build
+	@echo Building: darwin/amd64 - $(VERSION)
+	OUTPUT_DIR=build/darwin/amd64 $(MAKE) coredns SYSTEM="GOOS=darwin GOARCH=amd64" CHECKS="" BUILDOPTS=""
+	# @echo Building: darwin/arm64 - $(VERSION)
+	# OUTPUT_DIR=build/darwin/arm64 $(MAKE) coredns SYSTEM="GOOS=darwin GOARCH=arm64" CHECKS="" BUILDOPTS=""
+	# @echo Building: windows/amd64 - $(VERSION)
+	# OUTPUT_DIR=build/windows/amd64 $(MAKE) coredns.exe SYSTEM="GOOS=windows GOARCH=amd64" CHECKS="" BUILDOPTS=""
+
+.PHONY: build_linux
+build_linux:
+	@go version
+	@echo Cleaning old builds
+	@echo Building: linux/$(LINUX_ARCH) - $(VERSION) ;\
+	for arch in $(LINUX_ARCH); do \
+	    @rm -rf build/linux/$$arch; \
+	    OUTPUT_DIR=build/linux/$$arch  $(MAKE) coredns SYSTEM="GOOS=linux GOARCH=$$arch" CHECKS="" BUILDOPTS="" ;\
+	done
+
+.PHONY: tar
+tar:
+	@echo Cleaning old releases
+	@rm -rf release && mkdir release
+	tar -zcf release/$(NAME)_$(VERSION)_darwin_amd64.tgz -C build/darwin/amd64 $(BINARY)
+	tar -zcf release/$(NAME)_$(VERSION)_darwin_arm64.tgz -C build/darwin/arm64 $(BINARY)
+	tar -zcf release/$(NAME)_$(VERSION)_windows_amd64.tgz -C build/windows/amd64 $(BINARY_EXE)
+	for arch in $(LINUX_ARCH); do \
+	    tar -zcf release/$(NAME)_$(VERSION)_linux_$$arch.tgz -C build/linux/$$arch $(BINARY)  ;\
+	done
+
+.PHONY: version
+version:
+	@echo $(VERSION)
+
+.PHONY: clean
+clean:
+	rm -rf release
+	rm -rf build
+

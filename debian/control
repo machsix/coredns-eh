@@ -1,0 +1,12 @@
+Source: coredns
+Section: net
+Priority: optional
+Maintainer: Miek Gieben <miek@coredns.io>
+Uploaders: machsix <machsix@github.com>
+Build-Depends: debhelper (>= 9), ca-certificates, curl, lsb-release, jq
+Vcs-Git: https://github.com/machsix/coredns-eh
+
+Package: coredns
+Architecture: any
+Description: DNS server that chains plugins
+Depends: adduser

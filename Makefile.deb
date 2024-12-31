@@ -1,0 +1,18 @@
+LINUX_ARCH:=amd64 armhf arm64
+CORE_VERSION	:= $(shell grep 'CoreVersion' pkg/coredns/coremain/version.go | awk '{ print $$3 }' | tr -d '"')
+VERSION   := $(CORE_VERSION)-$(shell git -C pkg/coredns rev-parse --short HEAD)
+DISTRIBUTION    := $(shell lsb_release -sr)
+PACKAGEVERSION  := $(VERSION)-0~$(DISTRIBUTION)0
+
+.PHONY: all
+all:
+	for arch in $(LINUX_ARCH); do \
+			@echo Building: linux/$$arch ;\
+			mkdir -p release; \
+			dpkg-buildpackage -us -uc -b --target-arch $$arch ;\
+			mv ../coredns_$(PACKAGEVERSION)_$$arch.deb ./release ;\
+	done
+
+.PHONY: clean
+clean:
+	 dpkg-buildpackage -rfakeroot -Tclean

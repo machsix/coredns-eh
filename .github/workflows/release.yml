@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Go Version
+        run: echo "GO_VERSION=$(cat .go-version)" >> $GITHUB_ENV
+
+      - name: Set up Go
+        uses: actions/setup-go@v5.2.0
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y debhelper curl git
+
+      - name: Build linux packages
+        run: make -f Makefile.deb
+
+      - name: Build MacOSX/Windows
+        run: make -f Makefile.release build_other
+
+      - name: Build linux other arch
+        run: make -f Makefile.release LINUX_ARCH="mips64le ppc64le s390x mips riscv64"
+
+      - name: Create tar files
+        run: make -f Makefile.release tar
+
+      - name: get the commit hash of all submodules and set an environment variable INFO with it
+        run: |
+          git submodule foreach 'echo "${path#*/}: $(git config --get remote.origin.url)/tree/$sha1"' > INFO
+          echo "INFO=$(grep 'github' INFO)" >> $GITHUB_ENV
+          rm INFO
+
+      - name: Create release by uploading all the files in release folder
+        uses: softprops/action-gh-release@v2.2.0
+        with:
+          files: release/*
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          title: ${{ github.ref }}
+          body: ${{ env.INFO }}
+          make_latest: true
+          draft: false
+          prerelease: false
