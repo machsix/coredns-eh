@@ -5,6 +5,9 @@ on:
     tags:
       - "*"
 
+permissions:
+  contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -23,6 +26,7 @@ jobs:
         uses: actions/setup-go@v5.2.0
         with:
           go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: "**/*.sum"
 
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y debhelper curl git
@@ -34,16 +38,15 @@ jobs:
         run: make -f Makefile.release build_other
 
       - name: Build linux other arch
-        run: make -f Makefile.release LINUX_ARCH="mips64le ppc64le s390x mips riscv64"
+        run: make -f Makefile.release LINUX_ARCH="mips64le ppc64le s390x mips riscv64" build_linux
 
       - name: Create tar files
         run: make -f Makefile.release tar
 
-      - name: get the commit hash of all submodules and set an environment variable INFO with it
+      - name: Get package permalink
         run: |
-          git submodule foreach 'echo "${path#*/}: $(git config --get remote.origin.url)/tree/$sha1"' > INFO
-          echo "INFO=$(grep 'github' INFO)" >> $GITHUB_ENV
-          rm INFO
+          date > release.txt
+          git submodule foreach 'echo "${path#*/}: $(git config --get remote.origin.url)/tree/$sha1"' | grep "github" >> release.txt
 
       - name: Create release by uploading all the files in release folder
         uses: softprops/action-gh-release@v2.2.0
@@ -52,7 +55,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
           title: ${{ github.ref }}
-          body: ${{ env.INFO }}
+          body_path: release.txt
           make_latest: true
           draft: false
           prerelease: false

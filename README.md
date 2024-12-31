@@ -1,7 +1,7 @@
 [![CoreDNS](https://coredns.io/images/CoreDNS_Colour_Horizontal.png)](https://coredns.io)
 
 [![Documentation](https://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/coredns/coredns)
-[![GitHub release](https://img.shields.io/github/release/machsix/coredns-eh.svg)](https://github.com/machsix/coredns-eh/releases)
+[![Release](https://github.com/machsix/coredns-eh/actions/workflows/release.yml/badge.svg?event=release)](https://github.com/machsix/coredns-eh/actions/workflows/release.yml)
 # CoreDNS with WGSD and CoreDNS-mDNS
 
 This repository is a package of CoreDNS bundled with [WGSD](https://github.com/jwhited/wgsd) and [CoreDNS-mDNS](https://github.com/openshift/coredns-mdns).

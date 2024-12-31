@@ -7,7 +7,7 @@ PACKAGEVERSION  := $(VERSION)-0~$(DISTRIBUTION)0
 .PHONY: all
 all:
 	for arch in $(LINUX_ARCH); do \
-			@echo Building: linux/$$arch ;\
+			echo Building: linux/$$arch ;\
 			mkdir -p release; \
 			dpkg-buildpackage -us -uc -b --target-arch $$arch ;\
 			mv ../coredns_$(PACKAGEVERSION)_$$arch.deb ./release ;\
