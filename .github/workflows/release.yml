@@ -49,12 +49,10 @@ jobs:
           git submodule foreach 'echo "${path#*/}: $(git config --get remote.origin.url)/tree/$sha1"' | grep "github" >> release.txt
 
       - name: Create release by uploading all the files in release folder
-        uses: softprops/action-gh-release@v2.2.0
+        uses: softprops/action-gh-release@v2.1.0
         with:
           files: release/*
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
-          title: ${{ github.ref }}
           body_path: release.txt
           make_latest: true
           draft: false
