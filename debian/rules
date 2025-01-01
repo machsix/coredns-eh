@@ -6,7 +6,7 @@ VERSION   := $(CORE_VERSION)-$(shell git -C pkg/coredns rev-parse --short HEAD)
 LINUX_ARCH	:= $(DEB_TARGET_ARCH)
 DEB_HOST_ARCH   := $(DEB_TARGET_ARCH)
 DISTRIBUTION    := $(shell lsb_release -sr)
-BUILD_NUMBER    := 1
+BUILD_NUMBER    := 2
 PACKAGEVERSION  := $(VERSION)-$(BUILD_NUMBER)~$(DISTRIBUTION)0
 
 # Debian calls it armhf, we call it arm.

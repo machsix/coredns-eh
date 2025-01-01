@@ -8,9 +8,12 @@ replace github.com/coredns/coredns v1.12.0 => ./pkg/coredns
 
 replace github.com/relekang/coredns-blocklist v1.12.1 => github.com/machsix/coredns-blocklist v1.12.2
 
+replace github.com/machsix/coredns-addition v1.0.1 => ./pkg/coredns-addition
+
 require (
 	github.com/coredns/coredns v1.12.0
 	github.com/jwhited/wgsd v0.3.6
+	github.com/machsix/coredns-addition v1.0.1
 	github.com/miekg/dns v1.1.62
 	github.com/openshift/coredns-mdns/v4 v4.0.0-20230213232326-1b73907c925f
 	github.com/relekang/coredns-blocklist v1.12.1

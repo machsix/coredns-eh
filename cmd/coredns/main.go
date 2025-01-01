@@ -3,10 +3,12 @@ package main
 import (
 	_ "github.com/coredns/coredns/core/plugin"
 	_ "github.com/jwhited/wgsd"
+	_ "github.com/machsix/coredns-addition"
 	_ "github.com/openshift/coredns-mdns/v4"
 	_ "github.com/relekang/coredns-blocklist"
 
 	"fmt"
+
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/coremain"
 )
@@ -35,6 +37,9 @@ func init() {
 
 	// Insert "mdns" after "cache"
 	dnsserver.Directives = insertAfter(dnsserver.Directives, "cache", "mdns")
+
+	// Insert "addition" after "hosts"
+	dnsserver.Directives = insertAfter(dnsserver.Directives, "hosts", "addition")
 }
 
 func main() {
