@@ -3,12 +3,12 @@ package main
 import (
 	_ "github.com/coredns/coredns/core/plugin"
 	_ "github.com/jwhited/wgsd"
-  _ "github.com/relekang/coredns-blocklist"
-  _ "github.com/openshift/coredns-mdns/v4"
+	_ "github.com/openshift/coredns-mdns/v4"
+	_ "github.com/relekang/coredns-blocklist"
 
+	"fmt"
 	"github.com/coredns/coredns/core/dnsserver"
 	"github.com/coredns/coredns/coremain"
-  "fmt"
 )
 
 func init() {
@@ -30,8 +30,8 @@ func init() {
 	// Append "blocklist"
 	dnsserver.Directives = appendDirective(dnsserver.Directives, "blocklist")
 
-	// Insert "wsgd" after "file"
-	dnsserver.Directives = insertAfter(dnsserver.Directives, "file", "wsgd")
+	// Insert "wgsd" after "file"
+	dnsserver.Directives = insertAfter(dnsserver.Directives, "file", "wgsd")
 
 	// Insert "mdns" after "cache"
 	dnsserver.Directives = insertAfter(dnsserver.Directives, "cache", "mdns")

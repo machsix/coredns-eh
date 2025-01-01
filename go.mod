@@ -6,6 +6,8 @@ replace github.com/jwhited/wgsd v0.3.6 => ./pkg/wgsd
 
 replace github.com/coredns/coredns v1.12.0 => ./pkg/coredns
 
+replace github.com/relekang/coredns-blocklist v1.12.1 => github.com/machsix/coredns-blocklist v1.12.2
+
 require (
 	github.com/coredns/coredns v1.12.0
 	github.com/jwhited/wgsd v0.3.6
