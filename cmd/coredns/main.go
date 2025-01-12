@@ -14,11 +14,6 @@ import (
 )
 
 func init() {
-	// Function to append an element
-	appendDirective := func(list []string, item string) []string {
-		return append(list, item)
-	}
-
 	// Function to insert an element after another
 	insertAfter := func(list []string, after string, item string) []string {
 		for i, v := range list {
@@ -29,8 +24,8 @@ func init() {
 		panic(fmt.Sprintf("failed to insert %q after %q: not found", item, after))
 	}
 
-	// Append "blocklist"
-	dnsserver.Directives = appendDirective(dnsserver.Directives, "blocklist")
+	// Insert "blocklist" after "log"
+	dnsserver.Directives = insertAfter(dnsserver.Directives, "log", "blocklist")
 
 	// Insert "wgsd" after "file"
 	dnsserver.Directives = insertAfter(dnsserver.Directives, "file", "wgsd")
