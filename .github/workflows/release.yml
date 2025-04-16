@@ -53,7 +53,7 @@ jobs:
           FURY_TOKEN: ${{ secrets.FURY_TOKEN }}
         run: |
           for file in $(ls -1 release/*.deb); do
-              curl -F "package=@$file"  https://${FURY_TOKEN}@push.fury.io/machsix/
+            curl -F "package=@$file"  https://${FURY_TOKEN}@push.fury.io/machsix/
           done
 
       - name: Create release by uploading all the files in release folder
