@@ -5,8 +5,7 @@ endif
 NAME:=coredns
 BINARY:="coredns" "wgsd-client"
 BINARY_EXE := $(foreach arg,$(BINARY),$(arg).exe)
-VERSION:=$(shell grep 'CoreVersion' pkg/coredns/coremain/version.go | awk '{ print $$3 }' | tr -d '"')
-# VERSION:=$(shell grep -m 1 'coredns/coredns' go.sum  | awk '{print $$2}' | cut -c2-)
+VERSION := $(shell head -n 1 version)
 GITHUB:=coredns
 LINUX_ARCH:=amd64 arm arm64 mips64le ppc64le s390x mips riscv64
 GOLANG_VERSION ?= $(shell cat .go-version)

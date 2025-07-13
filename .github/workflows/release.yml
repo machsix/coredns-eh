@@ -15,9 +15,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          submodules: true
-          fetch-depth: 0
+        # with:
+        #   submodules: true
+        #   fetch-depth: 0
 
       - name: Setup Go Version
         run: echo "GO_VERSION=$(cat .go-version)" >> $GITHUB_ENV
@@ -46,7 +46,6 @@ jobs:
       - name: Get package permalink
         run: |
           date > release.txt
-          git submodule foreach 'echo "${path#*/}: $(git config --get remote.origin.url)/tree/$sha1"' | grep "github" >> release.txt
 
       - name: Deploy deb to Fury
         env:

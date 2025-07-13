@@ -1,13 +1,13 @@
 #!/usr/bin/make -f
 
-CORE_VERSION	:= $(shell grep 'CoreVersion' pkg/coredns/coremain/version.go | awk '{ print $$3 }' | tr -d '"')
-# VERSION 	:= $(CORE_VERSION)-$(shell git rev-parse --short HEAD 2> /dev/null|| echo '0')
-VERSION   := $(CORE_VERSION)-$(shell git -C pkg/coredns rev-parse --short HEAD)
+CORE_VERSION := $(shell head -n 1 version)
+VERSION := $(CORE_VERSION)-$(shell sed -n '2p' version | cut -c1-7)
 LINUX_ARCH	:= $(DEB_TARGET_ARCH)
 DEB_HOST_ARCH   := $(DEB_TARGET_ARCH)
 DISTRIBUTION    := $(shell lsb_release -sr)
 BUILD_NUMBER    := 1
 PACKAGEVERSION  := $(VERSION)-$(BUILD_NUMBER)~$(DISTRIBUTION)0
+COREDNS_DIR := $(shell go list -m -f '{{ .Dir }}' github.com/coredns/coredns)
 
 # Debian calls it armhf, we call it arm.
 ifeq ($(DEB_TARGET_ARCH),armhf)
@@ -33,7 +33,7 @@ override_dh_auto_install:
 	mkdir -p debian/man
 	cp build/linux/$(LINUX_ARCH)/coredns debian/coredns/usr/bin
 	cp build/linux/$(LINUX_ARCH)/wgsd-client debian/coredns/usr/bin
-	cp pkg/coredns/man/* debian/man/
+	cp ${COREDNS_DIR}/man/* debian/man/
 	cp debian/Corefile debian/coredns/etc/coredns/Corefile
 
 override_dh_gencontrol:

@@ -1,5 +1,14 @@
-coredns (0-0) UNRELEASED; urgency=medium
+coredns (1.12.2-1) unstable; urgency=medium
 
-  * Package for Debian.
+  * New upstream release 1.12.2.
+    - Introduced major improvements to plugin stability and extensibility.
+    - Kubernetes plugin: Added multicluster support.
+    - File plugin: Added fallthrough support.
+    - Forward plugin: Introduced new SetProxyOptions function.
+    - QUIC (DoQ) plugin: Limited concurrent streams for better performance under load.
+    - Various bug fixes and optimizations across multiple plugins, including:
+      + rewrite
+      + proxy
+      + metrics
 
- -- Miek Gieben <miek@coredns.io>  Sat, 11 Nov 2017 09:52:00 +0000
+ -- machsix <machsix@github>  Sun, 13 Jul 2025 23:00:00 -0400

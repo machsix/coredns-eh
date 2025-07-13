@@ -1,9 +1,0 @@
-[submodule "pkg/coredns"]
-	path = pkg/coredns
-	url = https://github.com/coredns/coredns
-[submodule "pkg/wgsd"]
-	path = pkg/wgsd
-	url = https://github.com/jwhited/wgsd
-[submodule "pkg/coredns-addition"]
-	path = pkg/coredns-addition
-	url = https://github.com/machsix/coredns-addition

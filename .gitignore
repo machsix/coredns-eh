@@ -15,3 +15,16 @@
 # vendor/
 build/
 release/
+
+# Deb
+debian/.debhelper/
+debian/*.debhelper.log
+debian/*.postinst.debhelper
+debian/*.postrm.debhelper
+debian/*.prerm.debhelper
+debian/*.substvars
+debian/debhelper-build-stamp
+debian/files
+debian/coredns/
+debian/man/
+
